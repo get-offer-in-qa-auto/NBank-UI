@@ -1,13 +1,179 @@
+/* ✅ Ensure Bootstrap’s Theme System Works */
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+/* ✅ Override Any Custom Styles That May Conflict */
+[data-bs-theme="dark"] body {
+  background-color: #121212 !important;
+  color: #ffffff !important;
+}
+
+[data-bs-theme="light"] body {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
+/* ✅ Set default size for the logo */
+.logo {
+  width: 100px;  /* Adjust width */
+  height: auto;  /* Maintain aspect ratio */
+}
+
+/* ✅ Set different sizes for dark and light mode */
+[data-bs-theme="dark"] .logo {
+  width: 70px; /* Slightly smaller in dark mode */
+}
+
+[data-bs-theme="light"] .logo {
+  width: 70px; /* Normal size in light mode */
+}
+
+/* ✅ Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;600;800&family=Jost:wght@300;400;600&display=swap');
+
+/* ✅ Apply Unbounded for Headers */
+h1, h2, h3 {
+  font-family: 'Unbounded', sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* ✅ Apply Jost for Text */
+body, p, span, a, li {
+  font-family: 'Jost', sans-serif;
+  font-weight: 400;
+}
+
+/* ✅ Ensure Bootstrap Components Use Correct Fonts */
+[data-bs-theme="dark"] body {
+  font-family: 'Jost', sans-serif;
+  color: white;
+}
+
+[data-bs-theme="light"] body {
+  font-family: 'Jost', sans-serif;
+  color: black;
+}
+
+/* ✅ Green Buttons with Black Border */
+.btn-primary {
+  background-color: #08fc04 !important; /* Green */
+  border: 2px solid #08fc04 !important; /* Black Border */
+  color: black !important; /* Ensure text is readable */
+  font-weight: bold;
+  padding: 12px 18px;
+  border-radius: 5px;
+  transition: all 0.3s ease-in-out;
+}
+
+/* ✅ Hover Effect */
+.btn-primary:hover {
+  background-color: #07e603 !important; /* Slightly darker green */
+  transform: scale(1.05); /* Small effect on hover */
+}
+
+/* ✅ Dark Mode Button (Black Border Stays) */
+[data-bs-theme="dark"] .btn-primary {
+  background-color: #08fc04 !important; /* Same Green */
+  color: black !important;
+  border: 2px solid #08fc04 !important;
+}
+
+[data-bs-theme="dark"] .btn-primary:hover {
+  background-color: #07e603 !important;
+}
+
+/* ✅ Default Pink for Links */
+a {
+  color: #fc1589 !important; /* Pink */
+  text-decoration: none; /* Remove underline */
+  font-weight: 500;
+  transition: color 0.2s ease-in-out;
+}
+
+/* ✅ Hover Effect */
+a:hover {
+  color: #e01478 !important; /* Slightly darker pink */
+  text-decoration: underline; /* Add underline on hover */
+}
+
+/* ✅ Dark Mode */
+[data-bs-theme="dark"] a {
+  color: #fc1589 !important;
+}
+
+[data-bs-theme="dark"] a:hover {
+  color: #e01478 !important;
+}
+
+.card {
+  width: 100%;
+  max-width: 500px; /* ✅ Ensures consistent width */
+  padding: 20px;
+  text-align: center;
+}
+
+.login-container {
+  display: flex;
+  justify-content: center; /* ✅ Centers horizontally */
+  align-items: center; /* ✅ Centers vertically */
+  height: calc(100vh - 80px); /* ✅ Subtract header height (Adjust if needed) */
+  width: 100vw; /* ✅ Full screen width */
+}
+
+/* ✅ Default shadow for light theme */
+.shadow-custom {
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Light shadow */
+  transition: all 0.3s ease-in-out;
+}
+
+/* ✅ Dark mode shadow (Lighter, glowing effect) */
+[data-bs-theme="dark"] .shadow-custom {
+  box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.2); /* Soft glow for dark mode */
+}
+
+.container-center {
+  padding-top: 40px;
+  display: flex;
+  flex-direction: column; /* ✅ Ensures vertical stacking */
+  align-items: center; /* ✅ Centers the cards horizontally */
+  width: 100%;
+}
+
+
+.delimiter {
+  padding-top: 40px; /* ✅ Adds space below the header */
+}
+
+/* ✅ Pink Badge */
+.badge-pink {
+  background-color: #fc1589 !important;
+  color: white !important;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 5px 10px;
+  border-radius: 5px;
+  text-transform: uppercase;
+}
+.header {
+  background-color: black;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  border-bottom: 3px solid white;
+}
+
+.btn-danger {
+  background-color: #fc1589 !important; /* ✅ Pink color */
+  border: 2px solid white; /* ✅ White border */
+  color: white !important;
+  font-weight: bold;
+  transition: all 0.3s ease-in-out;
+}
+
+.btn-danger:hover {
+  background-color: #e01478 !important; /* ✅ Slightly darker pink */
 }

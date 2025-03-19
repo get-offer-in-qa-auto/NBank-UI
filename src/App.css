@@ -25,7 +25,7 @@
 }
 
 .App-link {
-  color: #61dafb;
+  color: #fc1589;
 }
 
 @keyframes App-logo-spin {
@@ -35,4 +35,15 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+/* Ensure all links (including Banking APP) follow your theme */
+a {
+  text-decoration: none !important; /* ✅ Remove underline */
+  color: var(--primary-color) !important; /* ✅ Force Terminal Green */
+}
+
+/* Ensure hover color remains the same */
+a:hover {
+  color: #06c703 !important; /* Slightly darker green */
 }
