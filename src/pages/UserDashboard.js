@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import {BASE_URL} from "../App";
 
-const BASE_URL = "/api";
 
 function UserDashboard() {
     const [accounts, setAccounts] = useState([]);

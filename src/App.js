@@ -10,7 +10,8 @@ import HomeButton from "./components/HomeButton"; // ✅ Import HomeButton
 import EditProfile from "./pages/EditProfile"; // ✅ Import New Page
 import axios from "axios";
 
-const BASE_URL = "/api"; // ✅ Ensure correct API base URL
+const apiVersion = process.env.REACT_APP_API_VERSION || "v1";
+export const BASE_URL = `/api/${apiVersion}`;
 
 function App() {
     const [theme, setTheme] = useState("light");
@@ -31,6 +32,12 @@ function App() {
 
         // 🔹 Fetch Profile Only If Auth Token Exists
         const fetchProfile = async () => {
+            // ✅ Fetch only if NOT an admin
+            if (auth?.role === "ADMIN") {
+                setLoading(false);
+                return;
+            }
+
             if (!authHeader) {
                 console.warn("⚠️ No auth token found, skipping profile request.");
                 setLoading(false);

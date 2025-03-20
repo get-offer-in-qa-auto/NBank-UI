@@ -1,6 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+
 
 
 const Header = ({ theme, auth, user }) => {
@@ -8,6 +10,13 @@ const Header = ({ theme, auth, user }) => {
     const logoSrc = theme === "dark" ? "/images/logo_dark.png" : "/images/logo_light.png";
 
     const navigate = useNavigate();
+    const location = useLocation();
+
+
+    // ❌ Hide logout button on login and main page
+    const hideLogout = location.pathname === "/login" || location.pathname === "/";
+
+
 
     const handleLogout = () => {
         localStorage.removeItem("authToken"); // ✅ Clear stored auth token
@@ -35,11 +44,13 @@ const Header = ({ theme, auth, user }) => {
                 </div>
 
             )}
+            {!hideLogout && auth && (
+                <button className="btn btn-danger" onClick={handleLogout}>
+                    🚪 Logout
+                </button>
+            )}
+        </header>
+    );
+};
 
-                    <button className="btn btn-danger" onClick={handleLogout}>Log Out</button>
-                    {/* ✅ Log Out Button */}
-                </header>
-            );
-            };
-
-            export default Header;
+export default Header;

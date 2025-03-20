@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import {BASE_URL} from "../App";
 
-const BASE_URL = "/api";
 
 function Deposit() {
     const [accounts, setAccounts] = useState([]);

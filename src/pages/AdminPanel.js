@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-const BASE_URL = "/api/admin";
+const apiVersion = process.env.REACT_APP_API_VERSION || "v1";
+export const BASE_URL = `/api/${apiVersion}`;
+const BASE_ADMIN_URL = BASE_URL + "/admin";
 
 function AdminPanel({ auth }) {
     const [users, setUsers] = useState([]);
@@ -20,7 +22,7 @@ function AdminPanel({ auth }) {
                 return;
             }
 
-            const response = await axios.get("/api/admin/users", {
+            const response = await axios.get( `${BASE_ADMIN_URL}/users`, {
                 headers: {
                     "Content-Type": "application/json",
                     "Accept": "application/json",
@@ -65,7 +67,7 @@ function AdminPanel({ auth }) {
             };
 
             // 🔹 Send POST request with headers & body
-            const response = await axios.post(`${BASE_URL}/users`, userPayload, {
+            const response = await axios.post(`${BASE_ADMIN_URL}/users`, userPayload, {
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": authHeader // ✅ Attach auth token from localStorage

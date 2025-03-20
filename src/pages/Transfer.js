@@ -2,10 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Modal, Button } from "react-bootstrap"; // ✅ Import Bootstrap Modal
+import {BASE_URL} from "../App";
 
-
-
-const BASE_URL = "/api";
 
 function Transfer() {
     const [mode, setMode] = useState("new"); // "new" or "repeat"

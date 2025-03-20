@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import {BASE_URL} from "../App";
 
-const BASE_URL = "/api";
 
 function EditProfile({ setUser }) {  // ✅ Accept setUser prop
     const [newName, setNewName] = useState("");
