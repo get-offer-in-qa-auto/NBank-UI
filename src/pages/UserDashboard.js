@@ -92,6 +92,31 @@ function UserDashboard() {
         }) + `, ${date.toLocaleTimeString("en-US")}`; // ✅ Add time (12-hour format)
     };
 
+    // ✅ Create New Account
+    const handleCreateAccount = async () => {
+        if (!authHeader) {
+            alert("❌ Unauthorized! Please log in.");
+            return;
+        }
+
+        try {
+            const response = await axios.post(`${BASE_URL}/accounts`, {}, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
+                    "Authorization": authHeader // 🔹 Force adding Authorization header
+                },
+                withCredentials: true
+            });
+
+            alert(`✅ New Account Created! Account Number: ${response.data.accountNumber}`);
+            fetchAccounts(); // ✅ Refresh accounts list
+        } catch (error) {
+            console.error("❌ Failed to create account:", error);
+            alert("❌ Failed to create account. Please try again.");
+        }
+    };
+
 
 
     return (
@@ -117,7 +142,7 @@ function UserDashboard() {
                 <button className="custom-btn action-btn shadow-custom" onClick={() => navigate("/transfer")}>
                     🔄 Make a Transfer
                 </button>
-                <button className="custom-btn action-btn shadow-custom" onClick={() => navigate("/accounts")}>
+                <button className="custom-btn action-btn shadow-custom"  onClick={handleCreateAccount}>
                     ➕ Create New Account
                 </button>
             </div>

@@ -5,8 +5,8 @@ function HomeButton() {
     const location = useLocation();
     const navigate = useNavigate();
 
-    // ✅ Hide the button if the user is already on the dashboard
-    if (location.pathname === "/dashboard") {
+    // ✅ Hide the button if the user is on the Dashboard or Login page
+    if (location.pathname === "/dashboard" || location.pathname === "/"|| location.pathname === "/login") {
         return null;
     }
 
