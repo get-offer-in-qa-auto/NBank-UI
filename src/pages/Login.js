@@ -44,7 +44,7 @@ function Login({ setAuth, theme }) {
     const handleKeyPress = (event) => {
         if (event.key === "Enter") {
             event.preventDefault();
-            addUser();
+            handleLogin();
         }
     };
 
