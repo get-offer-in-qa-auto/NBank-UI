@@ -18,6 +18,7 @@ function UserDashboard() {
 
     useEffect(() => {
         fetchAccounts();
+        fetchProfile(); // ✅ Fetch profile whenever dashboard is loaded
     }, []);
 
     const fetchAccounts = async () => {
@@ -66,7 +67,7 @@ function UserDashboard() {
 
     const fetchProfile = async () => {
         try {
-            const response = await axios.get(`${BASE_URL}/profile`, {
+            const response = await axios.get(`${BASE_URL}/customer/profile`, {
                 headers: {
                     "Content-Type": "application/json",
                     "Accept": "application/json",
@@ -124,7 +125,7 @@ function UserDashboard() {
             <h1>User Dashboard</h1>
             <h2 className="welcome-text">
                 Welcome, {profile.name ? (
-                <span style={{color: "#08fc04", fontWeight: "bold"}}>
+                <span style={{color: "#fc1589", fontWeight: "bold"}}>
                         {profile.name}
                     </span>
             ) : (
