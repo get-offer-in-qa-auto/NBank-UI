@@ -119,7 +119,7 @@ function Deposit() {
             </div>
 
             {/* ✅ Deposit Button */}
-            <button className="btn btn-primary mt-4" onClick={handleDeposit}>
+            <button className="btn btn-primary shadow-custom mt-4" onClick={handleDeposit}>
                 💵 Deposit
             </button>
         </div>

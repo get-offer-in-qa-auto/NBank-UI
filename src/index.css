@@ -228,3 +228,42 @@ a:hover {
 .toggle-buttons button {
   margin: 0 10px; /* ✅ Adds spacing between buttons */
 }
+
+.header h1 {
+  font-weight: bold;
+  font-size: 24px;
+  margin: 0;
+}
+
+/* ✅ Light Theme - Black Text */
+[data-bs-theme="light"] .header h1 {
+  color: black !important;
+}
+
+/* ✅ Dark Theme - White Text */
+[data-bs-theme="dark"] .header h1 {
+  color: white !important;
+}
+
+/* ✅ Default Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 25px;
+  border-bottom: 3px solid white;
+}
+
+/* ✅ Light Theme */
+[data-bs-theme="light"] .header {
+  background-color: white !important;
+  color: black !important;
+  border-bottom: 3px solid black;
+}
+
+/* ✅ Dark Theme */
+[data-bs-theme="dark"] .header {
+  background-color: black !important;
+  color: white !important;
+  border-bottom: 3px solid white;
+}

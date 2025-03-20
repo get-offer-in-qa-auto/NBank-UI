@@ -15,19 +15,67 @@ function Transfer() {
     const [recipientName, setRecipientName] = useState("");
     const [recipientAccount, setRecipientAccount] = useState("");
     const [amount, setAmount] = useState("");
+    const [searchQuery, setSearchQuery] = useState("");
     const [confirm, setConfirm] = useState(false);
+    const [filteredTransactions, setFilteredTransactions] = useState([]);
     const [transactions, setTransactions] = useState([]);
     const [searchUser, setSearchUser] = useState("");
     const [showModal, setShowModal] = useState(false); // ✅ Control for modal visibility
     const [repeatTransfer, setRepeatTransfer] = useState(null); // ✅ Store repeated transaction
 
 
+
     const authHeader = localStorage.getItem("authToken");
     const adminAuth = "Basic " + btoa("admin:admin"); // 🔹 Admin credentials for fetching users
 
+    // 🔹 Filter transactions based on search input
     useEffect(() => {
-        fetchAccounts();
+        if (!searchQuery) {
+            setFilteredTransactions(transactions);
+            return;
+        }
+
+        // 🔹 Match transactions by recipient username or ID
+        const matchedTransactions = transactions.filter(tx => {
+            const recipient = users.find(user => user.id === tx.relatedAccountId);
+            return recipient && (recipient.username.includes(searchQuery) || recipient.name?.includes(searchQuery));
+        });
+
+        setFilteredTransactions(matchedTransactions);
+    }, [searchQuery, transactions, users]);
+
+    useEffect(() => {
+        fetchUserTransactions();
+        fetchUsers();
+        fetchAccounts()
     }, []);
+
+
+    // 🔹 Fetch logged-in user's transactions
+    const fetchUserTransactions = async () => {
+        try {
+            const response = await axios.get(`${BASE_URL}/customer/accounts`, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
+                    "Authorization": authHeader // 🔹 Force adding Authorization header
+                },
+                withCredentials: true            });
+
+            // 🔹 Extract transactions from all user accounts
+            const allTransactions = response.data.flatMap(account =>
+                account.transactions.map(tx => ({
+                    ...tx,
+                    senderAccountId: account.id, // ✅ Ensure sender ID is correct
+                }))
+            );
+
+            setTransactions(allTransactions);
+        } catch (error) {
+            console.error("❌ Failed to fetch transactions:", error.response?.data || error.message);
+            alert("❌ Unable to fetch transactions. Please try again.");
+        }
+    };
 
     const fetchAccounts = async () => {
         try {
@@ -97,6 +145,12 @@ function Transfer() {
     const handleTransfer = async () => {
         if (!selectedAccount || !recipientAccount || !amount || !confirm) {
             alert("❌ Please fill all fields and confirm.");
+            return;
+        }
+
+        // Prevent self-transfer
+        if (parseInt(selectedAccount) === parseInt(recipientAccount)) {
+            alert("❌ You cannot transfer money to the same account.");
             return;
         }
 
@@ -180,30 +234,65 @@ function Transfer() {
             return;
         }
 
-        const transferData = {
-            senderAccountId: parseInt(selectedAccount), // ✅ Use selected sender account
-            receiverAccountId: repeatTransfer.relatedAccountId,
-            amount: parseFloat(amount),
-        };
-
-
         try {
+            // 🔹 Fetch all users and accounts from admin API
+            const adminResponse = await axios.get(`${BASE_URL}/admin/users`, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
+                    "Authorization": adminAuth // 🔹 Force adding Authorization header
+                },
+                withCredentials: true
+            });
+
+            const users = adminResponse.data;
+
+            let receiverAccountId = null;
+            let senderAccountId = null;
+
+            // 🔹 Find the transaction and determine the receiver's account ID
+            users.forEach(user => {
+                user.accounts.forEach(account => {
+                    account.transactions.forEach(tx => {
+                        if (tx.id === repeatTransfer.id) {
+                            receiverAccountId = account.id; // ✅ The account that received the transaction
+                        }
+                    });
+                });
+            });
+
+            // 🔹 Ensure the senderAccountId is properly selected by user
+            senderAccountId = parseInt(selectedAccount);
+
+            if (!receiverAccountId) {
+                alert("❌ Error: Unable to find the receiver's account.");
+                return;
+            }
+
+            const transferData = {
+                senderAccountId,
+                receiverAccountId,
+                amount: parseFloat(amount),
+            };
+
             await axios.post(`${BASE_URL}/accounts/transfer`, transferData, {
                 headers: {
                     "Content-Type": "application/json",
                     "Accept": "application/json",
-                    "Authorization": authHeader // 🔹 Force adding Authorization header
+                    "Authorization": authHeader // 🔹 Use user credentials
                 },
-                withCredentials: true            });
+                withCredentials: true
+            });
 
-            alert(`✅ Successfully transferred $${amount} to account ${repeatTransfer.relatedAccountId}!`);
+            alert(`✅ Transfer of $${amount} successful from Account ${senderAccountId} to ${receiverAccountId}!`);
             setShowModal(false); // ✅ Close modal
             setAmount(""); // ✅ Reset form
             setConfirm(false); // ✅ Reset confirmation
         } catch (error) {
-            alert(`❌ Transfer failed: ${error.response?.data || "Please try again."}`);
+            alert(`❌ Transfer failed: ${error.response?.data?.message || "Please try again."}`);
         }
     };
+
 
     return (
         <div className="container mt-4 text-center">
@@ -234,7 +323,7 @@ function Transfer() {
                         value={selectedAccount}
                         onChange={(e) => setSelectedAccount(e.target.value)}
                     >
-                        <option value="">-- Choose an account --</option>
+                        <option className="input-field" value="">-- Choose an account --</option>
                         {accounts.map((acc) => (
                             <option key={acc.id} value={acc.id}>
                                 {acc.accountNumber} (Balance: ${acc.balance.toFixed(2)})
@@ -274,7 +363,7 @@ function Transfer() {
                         <label className="form-check-label" htmlFor="confirmCheck">Confirm details are correct</label>
                     </div>
 
-                    <button className="btn-primary green-btn mt-4" onClick={handleTransfer}>
+                    <button className="btn-primary shadow-custom green-btn mt-4" onClick={handleTransfer}>
                         🚀 Send Transfer
                     </button>
                 </div>
@@ -291,7 +380,7 @@ function Transfer() {
                         value={searchUser}
                         onChange={(e) => setSearchUser(e.target.value)}
                     />
-                    <button className="custom-btn blue-btn mt-3" onClick={handleSearchTransactions}>
+                    <button className="custom-btn shadow-custom blue-btn mt-3" onClick={handleSearchTransactions}>
                         🔍 Search Transactions
                     </button>
 
@@ -304,7 +393,7 @@ function Transfer() {
                                     <br />
                                     <small>🔍 Found under: <strong>{tx.matchedName}</strong></small>
                                 </span>
-                                <button className="custom-btn pink-btn" onClick={() => handleRepeatTransfer(tx)}>
+                                <button className="custom-btn shadow-custom pink-btn" onClick={() => handleRepeatTransfer(tx)}>
                                     🔁 Repeat
                                 </button>
                             </li>

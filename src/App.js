@@ -6,6 +6,7 @@ import AdminPanel from "./pages/AdminPanel";
 import UserDashboard from "./pages/UserDashboard";
 import Deposit from "./pages/Deposit";
 import Transfer from "./pages/Transfer";
+import HomeButton from "./components/HomeButton"; // ✅ Import HomeButton
 import axios from "axios";
 
 const BASE_URL = "/api"; // ✅ Ensure correct API base URL
@@ -75,6 +76,8 @@ function App() {
                 <Route path="/transfer" element={<Transfer/>}/>
                 <Route path="/" element={<Login setAuth={setAuth} theme={theme}/>}/>
             </Routes>
+            {/* ✅ Show "Home" button on all screens except Dashboard */}
+            <HomeButton />
         </Router>
     );
 }
