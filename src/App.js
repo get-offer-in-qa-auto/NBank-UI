@@ -7,6 +7,7 @@ import UserDashboard from "./pages/UserDashboard";
 import Deposit from "./pages/Deposit";
 import Transfer from "./pages/Transfer";
 import HomeButton from "./components/HomeButton"; // ✅ Import HomeButton
+import EditProfile from "./pages/EditProfile"; // ✅ Import New Page
 import axios from "axios";
 
 const BASE_URL = "/api"; // ✅ Ensure correct API base URL
@@ -74,6 +75,7 @@ function App() {
                        element={auth?.role === "USER" ? <UserDashboard auth={auth} theme={theme}/> : <Navigate to="/"/>}/>
                 <Route path="/deposit" element={<Deposit/>}/>
                 <Route path="/transfer" element={<Transfer/>}/>
+                <Route path="/edit-profile" element={<EditProfile />} />
                 <Route path="/" element={<Login setAuth={setAuth} theme={theme}/>}/>
             </Routes>
             {/* ✅ Show "Home" button on all screens except Dashboard */}

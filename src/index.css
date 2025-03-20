@@ -267,3 +267,21 @@ a:hover {
   color: white !important;
   border-bottom: 3px solid white;
 }
+
+.profile-header {
+  display: flex;
+  align-items: center; /* ✅ Aligns avatar & name horizontally */
+  gap: 2px; /* ✅ Adds space between avatar and text */
+  max-width: 250px; /* ✅ Increased width */
+  padding: 5px 5px; /* ✅ Adds padding */
+  line-height: 0.8; /* ✅ Reduces spacing between lines */
+}
+
+.user-name,
+.user-username {
+  display: block; /* ✅ Ensures elements stack */
+  max-width: 220px; /* ✅ Prevents overflow */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; /* ✅ Handles long names */
+}

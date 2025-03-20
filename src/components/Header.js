@@ -25,16 +25,21 @@ const Header = ({ theme, auth, user }) => {
             </div>
             {/* ✅ Show User Info in the Corner */}
             {user && (
-                <div className="user-info" style={{ paddingRight: "20px" }}> {/* ✅ Add padding */}
-                    <span className="user-name">{user.name || "Noname"}</span>
-                    <br />
-                    <span className="user-username">@{user.username}</span>
+                <div className="profile-header" onClick={() => navigate("/edit-profile")} style={{cursor: "pointer"}}>
+
+                    <div className="user-info" style={{paddingRight: "20px"}}> {/* ✅ Add padding */}
+                        <span className="user-name">{user.name || "Noname"}</span>
+                        <br/>
+                        <span className="user-username">@{user.username}</span>
+                    </div>
                 </div>
+
             )}
 
-            <button className="btn btn-danger" onClick={handleLogout}>Log Out</button> {/* ✅ Log Out Button */}
-        </header>
-    );
-};
+                    <button className="btn btn-danger" onClick={handleLogout}>Log Out</button>
+                    {/* ✅ Log Out Button */}
+                </header>
+            );
+            };
 
-export default Header;
+            export default Header;
