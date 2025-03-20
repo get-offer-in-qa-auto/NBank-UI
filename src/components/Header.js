@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 
-const Header = ({ theme, auth }) => {
+const Header = ({ theme, auth, user }) => {
     // ✅ Choose logo dynamically based on the theme
     const logoSrc = theme === "dark" ? "/images/logo_dark.png" : "/images/logo_light.png";
 
@@ -23,6 +23,15 @@ const Header = ({ theme, auth }) => {
                     <h1>NoBugs Bank</h1>
                 </div>
             </div>
+            {/* ✅ Show User Info in the Corner */}
+            {user && (
+                <div className="user-info" style={{ paddingRight: "20px" }}> {/* ✅ Add padding */}
+                    <span className="user-name">{user.name || "Noname"}</span>
+                    <br />
+                    <span className="user-username">@{user.username}</span>
+                </div>
+            )}
+
             <button className="btn btn-danger" onClick={handleLogout}>Log Out</button> {/* ✅ Log Out Button */}
         </header>
     );

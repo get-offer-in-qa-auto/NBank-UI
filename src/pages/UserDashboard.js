@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const BASE_URL = "/api";
@@ -7,6 +8,9 @@ function UserDashboard() {
     const [accounts, setAccounts] = useState([]);
     const [depositAmounts, setDepositAmounts] = useState({});
     const [profile, setProfile] = useState({ name: "" });
+
+    const navigate = useNavigate();
+
 
 
     // ✅ Retrieve stored auth token from localStorage
@@ -91,49 +95,32 @@ function UserDashboard() {
 
 
     return (
-        <div className="container mt-4">
-            <h1 className="text-center">User Dashboard</h1>
-            <h2 className="text-center">Welcome, {profile.name ? (
-                <span style={{ color: "#08fc04", fontWeight: "bold" }}>
-            {profile.name}
-        </span>
+        <div className="container mt-4 text-center">
+            <h1>User Dashboard</h1>
+            <h2 className="welcome-text">
+                Welcome, {profile.name ? (
+                <span style={{color: "#08fc04", fontWeight: "bold"}}>
+                        {profile.name}
+                    </span>
             ) : (
-                <span style={{ color: "#fc1589", fontWeight: "bold" }}>
-            noname
-        </span>
-            )}!</h2> {/* ✅ Show Name */}
+                <span style={{color: "#fc1589", fontWeight: "bold"}}>
+                        noname
+                    </span>
+            )}!
+            </h2>
 
-
-            {/* ✅ Show Message If No Accounts Exist */}
-            {accounts.length === 0 ? (
-                <p className="text-center">You do not have accounts yet.</p>
-            ) : (
-                <div className="row justify-content-center mt-4">
-                    {accounts.map((acc) => (
-                        <div key={acc.id} className="col-md-6">
-                            <div className="card shadow-custom p-3 mb-3">
-                                <h4>Account: {acc.accountNumber}</h4>
-                                <p><strong>Balance:</strong> ${acc.balance.toFixed(2)}</p>
-
-                                {/* ✅ Show Transactions or Message */}
-                                <h5 className="mt-3">Recent Transactions</h5>
-                                {acc.transactions.length === 0 ? (
-                                    <p className="no-transactions-message">No transactions yet.</p>
-                                ) : (
-                                    <ul className="list-group">
-                                        {acc.transactions.slice(0, 5).map((tx) => (
-                                            <li key={tx.id} className="list-group-item">
-                                                <strong>{tx.type}:</strong> ${tx.amount.toFixed(2)}
-                                                <span className="text-muted"> ({formatDate(tx.timestamp)})</span> {/* ✅ Show Date */}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                )}
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            )}
+            {/* ✅ Action Buttons */}
+            <div className="button-group mt-4">
+                <button className="custom-btn action-btn shadow-custom" onClick={() => navigate("/deposit")}>
+                    💰 Deposit Money
+                </button>
+                <button className="custom-btn action-btn shadow-custom" onClick={() => navigate("/transfer")}>
+                    🔄 Make a Transfer
+                </button>
+                <button className="custom-btn action-btn shadow-custom" onClick={() => navigate("/accounts")}>
+                    ➕ Create New Account
+                </button>
+            </div>
         </div>
     );
 }
