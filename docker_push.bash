@@ -1,5 +1,5 @@
 DOCKER_USERNAME="nobugsme"
-LOCAL_IMAGE_NAME="nbank'ui"
+LOCAL_IMAGE_NAME="nbank-ui"
 LOCAL_IMAGE_TAG="latest"
 REMOTE_IMAGE_TAG="latest"
 
