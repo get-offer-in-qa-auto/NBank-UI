@@ -1,0 +1,20 @@
+name: Publish Docker image
+
+on: push
+
+jobs:
+  build-and-push:
+    name: Build and push Docker image to Docker Hub
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to Docker Hub
+        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build Docker image
+        run: docker build -t nobugsme/nbank-ui .
+
+      - name: Push Docker image
+        run: docker push nobugsme/nbank-ui
