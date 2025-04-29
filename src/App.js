@@ -10,8 +10,9 @@ import HomeButton from "./components/HomeButton"; // ✅ Import HomeButton
 import EditProfile from "./pages/EditProfile"; // ✅ Import New Page
 import axios from "axios";
 
+const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:4111/api";
 const apiVersion = process.env.REACT_APP_API_VERSION || "v1";
-export const BASE_URL = `/api/${apiVersion}`;
+export const BASE_URL = `${apiUrl}/${apiVersion}`;
 
 function App() {
     const [theme, setTheme] = useState("light");
@@ -46,6 +47,7 @@ function App() {
 
             try {
                 console.log("🔹 Fetching user profile...");
+                console.log(`${BASE_URL}`);
                 const response = await axios.get(`${BASE_URL}/customer/profile`, {
                     headers: {
                         "Content-Type": "application/json",

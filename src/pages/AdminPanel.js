@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
+const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:4111/api";
 const apiVersion = process.env.REACT_APP_API_VERSION || "v1";
-export const BASE_URL = `/api/${apiVersion}`;
+export const BASE_URL = `${apiUrl}/${apiVersion}`;
 const BASE_ADMIN_URL = BASE_URL + "/admin";
 
 function AdminPanel({ auth }) {
