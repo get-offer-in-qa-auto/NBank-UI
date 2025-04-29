@@ -11,12 +11,15 @@ RUN npm install
 # Copy all files into the container
 COPY . .
 
+ARG REACT_APP_API_URL=http://backend:4111/api
+ENV REACT_APP_API_URL=$REACT_APP_API_URL
+
 # ✅ Set API version using build argument
 ARG REACT_APP_API_VERSION=v1
 ENV REACT_APP_API_VERSION=$REACT_APP_API_VERSION
 
 # ✅ Ensure React sees the environment variable during build
-RUN REACT_APP_API_VERSION=$REACT_APP_API_VERSION npm run build
+RUN REACT_APP_API_URL=$REACT_APP_API_URL REACT_APP_API_VERSION=$REACT_APP_API_VERSION npm run build
 
 # Serve the built frontend with Nginx
 FROM nginx:latest AS production
