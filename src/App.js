@@ -47,7 +47,6 @@ function App() {
 
             try {
                 console.log("🔹 Fetching user profile...");
-                console.log(`${BASE_URL}`);
                 const response = await axios.get(`${BASE_URL}/customer/profile`, {
                     headers: {
                         "Content-Type": "application/json",
