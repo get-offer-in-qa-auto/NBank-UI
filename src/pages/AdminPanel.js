@@ -80,10 +80,22 @@ function AdminPanel({ auth }) {
 
             fetchUsers(); // 🔹 Refresh user list after adding a new user
         } catch (error) {
-            console.error("❌ Failed to create user:", error.response || error.message);
+        console.error("❌ Failed to create user:", error.response || error.message);
+
+        if (error.response && error.response.status === 400) {
+            const data = error.response.data;
+
+            // Собираем ошибки в строку
+            const formattedErrors = Object.entries(data)
+                .map(([field, message]) => `• ${field}: ${message}`)
+                .join("\n");
+
+            alert("❌ Failed to create user:\n\n" + formattedErrors);
+        } else {
             alert("❌ Failed to create user. Check console for details.");
         }
-    };
+    }
+};
 
     const handleKeyPress = (event) => {
         if (event.key === "Enter") {
