@@ -30,13 +30,26 @@ function App() {
 
         console.log("🌙 Applied theme:", document.documentElement.getAttribute("data-bs-theme"));
 
+        const token = localStorage.getItem("authToken");
+
+        try {
+            const base64 = token.replace("Basic ", "");
+            const decoded = atob(base64); // "username:password"
+            const [username] = decoded.split(":");
+
+            const role = username === "admin" ? "ADMIN" : "USER";
+            setAuth({ username, role });
+
+            console.log(`✅ Restored auth from token: ${username} (${role})`);
+        } catch (error) {
+            console.error("❌ Failed to decode auth token:", error);
+            localStorage.removeItem("authToken");
+        } finally {
+            setLoading(false);
+        }
+
         // 🔹 Fetch Profile Only If Auth Token Exists
         const fetchProfile = async () => {
-            // ✅ Fetch only if NOT an admin
-            if (auth?.role === "ADMIN") {
-                setLoading(false);
-                return;
-            }
 
             if (!authHeader) {
                 console.warn("⚠️ No auth token found, skipping profile request.");

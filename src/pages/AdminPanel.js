@@ -10,6 +10,30 @@ function AdminPanel({ auth }) {
     const [newUser, setNewUser] = useState({ username: "", password: "", role: "USER" });
 
     useEffect(() => {
+        if (!auth || auth.role !== "ADMIN") {
+            // попробуй восстановить auth из токена или редирект
+            const token = localStorage.getItem("authToken");
+            if (!token) {
+                window.location.href = "/login";
+                return;
+            }
+
+            axios.get(`${BASE_URL}/auth/me`, {
+                headers: { Authorization: token }
+            })
+                .then(res => {
+                    if (res.data.role !== "ADMIN") {
+                        window.location.href = "/login";
+                    } else {
+                        fetchUsers(); // теперь можно загружать
+                    }
+                })
+                .catch(() => window.location.href = "/login");
+
+            return;
+        }
+
+        // если auth уже есть и роль ADMIN
         fetchUsers();
     }, []);
 
