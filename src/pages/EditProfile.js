@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import {BASE_URL} from "../App";
@@ -8,6 +8,22 @@ function EditProfile({ setUser }) {  // ✅ Accept setUser prop
     const [newName, setNewName] = useState("");
     const navigate = useNavigate();
     const authHeader = localStorage.getItem("authToken");
+    const [currentName, setCurrentName] = useState("");
+
+    // ✅ Fetch current profile on mount
+    useEffect(() => {
+        axios.get(`${BASE_URL}/customer/profile`, {
+            headers: { Authorization: authHeader },
+            withCredentials: true
+        }).then(response => {
+            const name = response.data.name || "";
+            setCurrentName(name);
+            setNewName(name);
+        }).catch(error => {
+            console.error("❌ Failed to load profile:", error);
+            alert("❌ Failed to load profile.");
+        });
+    }, [authHeader]);
 
     const handleSubmit = async () => {
         if (!newName.trim()) {
@@ -15,7 +31,6 @@ function EditProfile({ setUser }) {  // ✅ Accept setUser prop
             return;
         }
 
-        // ✅ Check if the user is trying to save the same name as before
         if (newName.trim() === currentName?.trim()) {
             alert("⚠️ New name is the same as the current one.");
             return;
@@ -23,23 +38,28 @@ function EditProfile({ setUser }) {  // ✅ Accept setUser prop
 
         try {
             await axios.put(`${BASE_URL}/customer/profile`, { name: newName }, {
-                headers: { "Authorization": authHeader },
+                headers: { Authorization: authHeader },
                 withCredentials: true
             });
 
-            // ✅ Fetch the updated profile immediately
-            const response = await axios.get(`${BASE_URL}/customer/profile`, {
-                headers: { "Authorization": authHeader },
-                withCredentials: true
-            });
-
-            setUser(response.data); // ✅ Update global user state
             alert("✅ Name updated successfully!");
-            navigate("/dashboard");
         } catch (error) {
             console.error("❌ Failed to update name:", error);
             const backendMessage = error.response?.data || "❌ Failed to update name. Please try again.";
             alert(backendMessage);
+            return; // ❗️Не продолжаем дальше
+        }
+
+        try {
+            const response = await axios.get(`${BASE_URL}/customer/profile`, {
+                headers: { Authorization: authHeader },
+                withCredentials: true
+            });
+
+            setUser(response.data);
+            navigate("/dashboard");
+        } catch (error) {
+            console.warn("⚠️ Updated but failed to refresh user profile:", error);
         }
     };
 
