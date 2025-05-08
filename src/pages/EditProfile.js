@@ -15,6 +15,12 @@ function EditProfile({ setUser }) {  // ✅ Accept setUser prop
             return;
         }
 
+        // ✅ Check if the user is trying to save the same name as before
+        if (newName.trim() === currentName?.trim()) {
+            alert("⚠️ New name is the same as the current one.");
+            return;
+        }
+
         try {
             await axios.put(`${BASE_URL}/customer/profile`, { name: newName }, {
                 headers: { "Authorization": authHeader },
@@ -32,7 +38,8 @@ function EditProfile({ setUser }) {  // ✅ Accept setUser prop
             navigate("/dashboard");
         } catch (error) {
             console.error("❌ Failed to update name:", error);
-            alert("❌ Failed to update name. Please try again.");
+            const backendMessage = error.response?.data || "❌ Failed to update name. Please try again.";
+            alert(backendMessage);
         }
     };
 
