@@ -20,6 +20,7 @@ RUN REACT_APP_API_VERSION=$REACT_APP_API_VERSION npm run build
 
 # Serve the built frontend with Nginx
 FROM nginx:latest AS production
+COPY nginx/nginx.conf /etc/nginx/nginx.conf
 COPY --from=build /app/build /usr/share/nginx/html
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
