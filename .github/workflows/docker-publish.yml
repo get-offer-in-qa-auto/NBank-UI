@@ -21,4 +21,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: nobugsme/nbank-ui:latest
+          tags: nobugsme/nbank-ui:with_nginx
